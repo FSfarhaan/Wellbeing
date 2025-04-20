@@ -1,12 +1,12 @@
 // Import doctor images from assets
-import bhoomi from '../../assets/images/bhoomi.jpeg'
-import doctor1 from '../../assets/images/doctor1.jpg'
-import doctor2 from '../../assets/images/doctor20.jpg';
-import doctor3 from '../../assets/images/doctor30.jpg';
-import doctor4 from '../../assets/images/doctor40.jpeg';
-import doctor5 from '../../assets/images/doctor50.jpg';
-import doctor6 from '../../assets/images/doctor60.jpg';
-import doctor7 from '../../assets/images/doctor70.jpg';
+import bhoomi from '../../assets/experts/bhoomi.jpeg'
+import doctor1 from '../../assets/experts/doctor1.jpg'
+import doctor2 from '../../assets/experts/doctor20.jpg';
+import doctor3 from '../../assets/experts/doctor30.jpg';
+import doctor4 from '../../assets/experts/doctor40.jpeg';
+import doctor5 from '../../assets/experts/doctor50.jpg';
+import doctor6 from '../../assets/experts/doctor60.jpg';
+import doctor7 from '../../assets/experts/doctor70.jpg';
 
 export const doctorsData = [
   {

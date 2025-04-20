@@ -68,7 +68,7 @@ const Explore = () => {
       duration: '8 Hours 19 Minutes',
       lesson: 4,
       progress: 65,
-      image: require('../../../assets/article1.webp'),
+      image: require('../../../assets/articles/article1.webp'),
       link: "https://www.verywellmind.com/what-happens-to-your-brain-during-heartbreak-8740210"
     },
     {
@@ -79,7 +79,7 @@ const Explore = () => {
       duration: '6 Hours 45 Minutes',
       lesson: 3,
       progress: 45,
-      image: require('../../../assets/article2.webp'),
+      image: require('../../../assets/articles/article2.webp'),
       link: "https://www.popsugar.com/love/get-over-breakup-30884425"
     },
     {
@@ -90,7 +90,7 @@ const Explore = () => {
       duration: '9 Hours 30 Minutes',
       lesson: 6,
       progress: 20,
-      image: require('../../../assets/article3.webp'),
+      image: require('../../../assets/articles/article3.webp'),
       link: "https://www.verywellhealth.com/can-stress-make-you-sick-8788556"
     },
     {
@@ -101,7 +101,7 @@ const Explore = () => {
       duration: '9 Hours 30 Minutes',
       lesson: 6,
       progress: 20,
-      image: require('../../../assets/article4.jpg'),
+      image: require('../../../assets/articles/article4.jpg'),
       link: "https://www.thetimes.com/life-style/parenting/article/gen-z-social-media-harms-mental-health-mxq06n7xq"
     }
   ];

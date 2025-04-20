@@ -4,9 +4,7 @@ import {
   Text, 
   StyleSheet, 
   ScrollView, 
-  TouchableOpacity, 
-  Platform, 
-  Share 
+  TouchableOpacity
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { BarChart, PieChart } from 'react-native-chart-kit';

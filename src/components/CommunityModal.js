@@ -9,10 +9,10 @@ const CommunityModal = ({ isVisible, onClose, community, onJoin }) => {
         if (community?.image) {
           console.log(community.image)
             const newImage =
-                community.image === 44 ? require('../../assets/family.jpg') :
-                community.image === 45 ? require('../../assets/selflove.jpg') :
-                community.image === 46 ? require('../../assets/relationship.jpg') :
-                require('../../assets/career.jpg');
+                community.image === 44 ? require('../../assets/communities/family.jpg') :
+                community.image === 45 ? require('../../assets/communities/selflove.jpg') :
+                community.image === 46 ? require('../../assets/communities/relationship.jpg') :
+                require('../../assets/communities/career.jpg');
     
             setImage(newImage);
         }

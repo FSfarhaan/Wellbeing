@@ -39,5 +39,4 @@ yarn-error.*
 *chat_logs
 *__pycache__
 
-MyApp
-backend
+android

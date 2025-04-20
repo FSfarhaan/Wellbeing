@@ -122,9 +122,6 @@ const UserProfileScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* <View style={styles.header}>
-        <Text style={styles.greeting}>My Profile</Text>
-      </View> */}
       
       <View style={styles.profileSection}>
         <Image source={user.profileImage} style={styles.profileImage} />

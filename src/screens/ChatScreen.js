@@ -7,12 +7,9 @@ import {
   StyleSheet,
   SafeAreaView,
   FlatList,
-  Image,
-  ScrollView,
   Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import DoctorList from "../components/DoctorsList";
 import axios from "axios";
 import { StatusBar } from "expo-status-bar";
 
@@ -34,7 +31,6 @@ const ChatScreen = () => {
   const translateDocY = useRef(new Animated.Value(500)).current;
 
   const memoizedChatHistory = React.useMemo(() => chatHistory, [chatHistory]);
-
 
   const tabs = [
     {
@@ -82,7 +78,6 @@ const ChatScreen = () => {
       .replace(/\n{2,}/g, "\n"); // Remove excessive new lines
   };
 
-  // This function would connect to your Python backend
   const sendMessageToBackend = async (userMessage) => {
     console.log("Function ke andar: " + userMessage);
     try {
@@ -104,11 +99,6 @@ const ChatScreen = () => {
   };
   
   const saveMessages = async (text, sender) => {
-    // await response.data;
-    // setChatHistory((prevHistory) => [
-    //   ...prevHistory,
-    //   { id: sender === "bot" ? "typing" : Date.now().toString(), text, sender },
-    // ]);
     const response = await axios.post("http://192.168.198.209:3000/api/bot/bot-chat", { text, sender });
     const data = response.data;
     console.log(data.message);
@@ -137,38 +127,6 @@ const ChatScreen = () => {
     const botMessageText = botResponse.trim();
 
     saveMessages(botMessageText, "bot");
-  };
-
-  const handleDoctor = () => {
-    Animated.parallel([
-      Animated.timing(translateTabY, {
-        toValue: 150, // Move input & tabs DOWN by 100 pixels
-        duration: 500, // Takes 500 milliseconds (0.5 seconds)
-        useNativeDriver: true, // Optimizes performance
-      }),
-      Animated.timing(translateDocY, {
-        toValue: 0, // Fully fades in the doctors' list
-        duration: 500,
-        delay: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
-
-  const onClose = () => {
-    Animated.parallel([
-      Animated.timing(translateTabY, {
-        toValue: 0, // Move input & tabs DOWN by 100 pixels
-        duration: 500, // Takes 500 milliseconds (0.5 seconds)
-        delay: 300,
-        useNativeDriver: true, // Optimizes performance
-      }),
-      Animated.timing(translateDocY, {
-        toValue: 500, // Fully fades in the doctors' list
-        duration: 500,
-        useNativeDriver: true,
-      }),
-    ]).start();
   };
 
   const renderMessage = ({ item }) => {
@@ -208,29 +166,6 @@ const ChatScreen = () => {
         )}
       </View>
     );
-  };
-
-  const handleSchedule = (name) => {
-    const newMessage = "Book a session for me with " + name;
-    const userMessageId = Date.now().toString();
-    setChatHistory((prev) => [
-      ...prev,
-      { id: userMessageId, text: newMessage, sender: "user" },
-    ]);
-    setTimeout(() => {
-      flatListRef.current?.scrollToEnd({ animated: true });
-    }, 100);
-
-    setTimeout(() => {
-      const botMessageId = (Date.now() + 1).toString();
-      const text = "Successfully scheduled a session with " + name;
-      setIsTyping(true);
-      setResponseText(text.split(" "));
-
-      setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-    }, 2000);
   };
 
   useEffect(() => {
