@@ -30,7 +30,7 @@ const Explore = () => {
       title: 'Family Problems',
       members: '12,098K Members',
       description: "A supportive community where people share their family challenges and seek advice, empathy, and solutions from others who have faced similar experiences.",
-      image: require('../../../assets/family.jpg')
+      image: require('../../../assets/communities/family.jpg')
     },
     {
       mId: "67d7e664172aa358fb19d553",
@@ -38,7 +38,7 @@ const Explore = () => {
       title: 'Self-Love Hub',
       members: '10,394K Members',
       description: "A uplifting community focused on self-love, where members share experiences, affirmations, and tips to build confidence and self-care habits.",
-      image: require('../../../assets/selflove.jpg')
+      image: require('../../../assets/communities/selflove.jpg')
     },
     {
       mId: '67d7e691172aa358fb19d555',
@@ -46,7 +46,7 @@ const Explore = () => {
       title: 'Relationships',
       members: '8,754K Members',
       description: "A supportive space to discuss relationships, seek advice, and share experiences on love, trust, and communication.",
-      image: require('../../../assets/relationship.jpg')
+      image: require('../../../assets/communities/relationship.jpg')
     },
     {
       mId: "67d7e6a0172aa358fb19d557",
@@ -54,7 +54,7 @@ const Explore = () => {
       title: 'Career Guidance',
       members: '9,127K Members',
       description: "A community for career growth, where members get advice, share job opportunities, and discuss skills for professional success.",
-      image: require('../../../assets/career.jpg')
+      image: require('../../../assets/communities/career.jpg')
     }
   ];  
 
@@ -114,7 +114,7 @@ const Explore = () => {
       subtitle: 'Relaxing rain sounds for deep focus',
       reactions: 126,
       responses: 24,
-      image: require('../../../assets/rain.jpeg')
+      image: require('../../../assets/sounds/rain.jpeg')
     },
     {
       id: 2,
@@ -122,7 +122,7 @@ const Explore = () => {
       subtitle: 'Soothing chirping sounds to start your day peacefully',
       reactions: 98,
       responses: 15,
-      image: require('../../../assets/birds.jpeg')
+      image: require('../../../assets/sounds/birds.jpeg')
     }
   ];
 

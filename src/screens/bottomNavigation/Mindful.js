@@ -354,8 +354,8 @@ const styles = StyleSheet.create({
   emojiContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     marginRight: 12,
     borderRadius: 15,
     backgroundColor: '#fff',

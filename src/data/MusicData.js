@@ -1,8 +1,8 @@
-import RainImg from "../../assets/rain.jpeg"
-import WaterfallImg from "../../assets/waterfall.jpeg"
-import NightingaleImg from "../../assets/nightingale.jpeg"
-import JungleImg from "../../assets/jungle.jpeg"
-import BirdsImg from "../../assets/birds.jpeg"
+import RainImg from "../../assets/sounds/rain.jpeg"
+import WaterfallImg from "../../assets/sounds/waterfall.jpeg"
+import NightingaleImg from "../../assets/sounds/nightingale.jpeg"
+import JungleImg from "../../assets/sounds/jungle.jpeg"
+import BirdsImg from "../../assets/sounds/birds.jpeg"
 export const soundList = [
     {
       id: 1,

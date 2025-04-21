@@ -26,7 +26,7 @@ const musicData = [
     category: 'SLEEP MUSIC',
     audio: require('../../../../assets/audio/rain.mp3'),
     // duration: 3600, // 60 minutes in seconds
-    background: require('../../../../assets/rain.jpeg'),
+    background: require('../../../../assets/sounds/rain.jpeg'),
     color: '#1E2A59'
   },
 ];

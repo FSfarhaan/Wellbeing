@@ -1,7 +1,7 @@
 {
   "expo": {
-    "scheme": "Myapp",
-    "name": "MyApp",
+    "scheme": "peacehub",
+    "name": "peacehub",
     "slug": "peacehub",
     "owner": "fsfarhaanshaikh7",
     "extra": {
@@ -28,6 +28,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "jsEngine": "hermes",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",

@@ -1,33 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 // import { LinearGradient } from 'expo-linear-gradient';
 import DoctorCard from '../../components/DoctorCard'
 import { doctorsData } from '../../data/doctorsData';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Dashboard = ({ navigation }) => {
   const [progress, setProgress] = useState({ completed: 0, total: 3 });
   const popularDoctors = doctorsData.filter(doctor => doctor.isPopular);
   const [name, setName] = useState(null);
-  AsyncStorage.getItem("name").then(setName);
 
-  const getStoredData = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      const name = await AsyncStorage.getItem("name");
-      const email = await AsyncStorage.getItem("email");
-      const password = await AsyncStorage.getItem("password");
+  useFocusEffect(
+    useCallback(() => {
+      const getStoredData = async () => {
+        try {
+          const token = await AsyncStorage.getItem("token");
+          const name = await AsyncStorage.getItem("name");
+          const email = await AsyncStorage.getItem("email");
+          const password = await AsyncStorage.getItem("password");
   
-      console.log("Token:", token);
-      console.log("Name:", name);
-      console.log("Email:", email);
-      console.log("Password:", password);
-    } catch (error) {
-      console.error("Error retrieving data:", error);
-    }
-  };
+          const storedCompleted = await AsyncStorage.getItem('completed');
+
+          if(!storedCompleted) {
+            setProgress({
+              completed: 0,
+              total: 3
+            });
+            return;
+          } 
+          const parsedCompleted = JSON.parse(storedCompleted);
+          console.log("Dash me hu mai " + parsedCompleted);
   
-  getStoredData();
+          setProgress({
+            completed: parsedCompleted.filter(task => task === 1).length,
+            total: 3
+          });
+  
+          console.log("Token:", token);
+          console.log("Name:", name);
+          console.log("Email:", email);
+          console.log("Password:", password);
+        } catch (error) {
+          console.error("Error retrieving data:", error);
+        }
+      };
+  
+      getStoredData();
+    }, [])
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>

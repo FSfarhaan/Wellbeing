@@ -12,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { StatusBar } from "expo-status-bar";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen = () => {
   const [message, setMessage] = useState("");
@@ -24,6 +25,7 @@ const ChatScreen = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [visibleWords, setVisibleWords] = useState([]);
   const [responseText, setResponseText] = useState([]);
+  const [token, setToken] = useState("");
 
   const fadeAnimations = useRef([]);
   const flatListRef = useRef(null);
@@ -99,7 +101,11 @@ const ChatScreen = () => {
   };
   
   const saveMessages = async (text, sender) => {
-    const response = await axios.post("http://192.168.198.209:3000/api/bot/bot-chat", { text, sender });
+    const response = await axios.post("http://192.168.198.209:3000/api/bot/bot-chat", { text, sender }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = response.data;
     console.log(data.message);
   }
@@ -223,10 +229,15 @@ const ChatScreen = () => {
 
   useEffect(() => {
     const getMessages = async () => {
+      if(!token) return;
       try {
-          const response = await axios.get("http://192.168.198.209:3000/api/bot/bot-chat");
+          const response = await axios.get("http://192.168.198.209:3000/api/bot/bot-chat", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const data = response.data;
-          // console.log(data.messages);
+          console.log(data.messages);
 
           // Ensure `data.messages` is correctly added to chatHistory
           setChatHistory((prev) => [...prev, ...data.messages]); 
@@ -235,11 +246,15 @@ const ChatScreen = () => {
       }
   };
     getMessages();
-  }, [])
+  }, [token])
 
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true });
 }, [chatHistory]);
+
+useEffect(() => {
+  AsyncStorage.getItem("token").then(setToken);
+}, []);
 
   return (
     <SafeAreaView style={styles.container}>

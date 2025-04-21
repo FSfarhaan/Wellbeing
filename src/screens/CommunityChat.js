@@ -41,7 +41,7 @@ const CommunityChat = ({ route, navigation }) => {
       console.log(text);
 
       const response = await axios.post(
-        "http://192.168.198.209:5001/send_message",
+        "http://192.168.198.209:8000/send_message",
         { message: text },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -228,8 +228,6 @@ const CommunityChat = ({ route, navigation }) => {
           value={message}
           onChangeText={setMessage}
           placeholderTextColor="#999"
-          onFocus={() => console.log("khula")}
-          onBlur={() => console.log("band hua")}
         />
 
         <TouchableOpacity style={styles.emojiButton}>

@@ -1,16 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Animated, Easing } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Animated, Easing, Button } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { ScrollView } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const DailyTasks = () => {
   const [timeLeft, setTimeLeft] = useState('');
-  const [tasks, setTasks] = useState([
-    { id: 1, name: 'Drink 3 glasses of water', completed: 0, total: 3, icon: 'cup-water', reward: '💧 Hydration Hero! +10 points' },
-    { id: 2, name: 'Go for a 5 min walk', completed: 0, total: 1, icon: 'walk', reward: '🚶 Step Master! +15 points' },
-    { id: 3, name: 'Read 1 page', completed: 0, total: 1, icon: 'book-open-page-variant', reward: '📚 Knowledge Seeker! +10 points' },
-  ]);
-  const [streakDays, setStreakDays] = useState(3);
+  const data = [
+    { id: 1, name: "Meditate for 5 minutes", completed: 0, total: 1, icon: "meditation", reward: "🧘 Calm Soul! +10 points" },
+    { id: 2, name: "Read a book for 10 minutes", completed: 0, total: 1, icon: "book-open-page-variant", reward: "📚 Knowledge Seeker! +10 points" },
+    { id: 3, name: "Go for a 5-minute walk", completed: 0, total: 1, icon: "walk", reward: "🚶 Step Master! +15 points" },
+    { id: 4, name: "Make yourself your favorite drink", completed: 0, total: 1, icon: "coffee", reward: "☕ Treat Yourself! +10 points" },
+    { id: 5, name: "Write down 3 things you're grateful for", completed: 0, total: 1, icon: "notebook-outline", reward: "🙏 Grateful Guru! +15 points" },
+    { id: 6, name: "Stay off social media for 30 minutes", completed: 0, total: 1, icon: "cellphone-off", reward: "📴 Focus Champ! +20 points" },
+    { id: 7, name: "Listen to calming music for 10 minutes", completed: 0, total: 1, icon: "music", reward: "🎵 Vibe Master! +10 points" },
+    { id: 8, name: "Call or message a friend to check in", completed: 0, total: 1, icon: "account-voice", reward: "📞 Kind Soul! +15 points" },
+    { id: 9, name: "Eat one fruit mindfully", completed: 0, total: 1, icon: "food-apple", reward: "🍎 Fruitful Effort! +10 points" },
+    { id: 10, name: "Smile at yourself in the mirror", completed: 0, total: 1, icon: "emoticon-happy-outline", reward: "😊 Self-Love Star! +10 points" },
+    { id: 11, name: "Journal how you're feeling today", completed: 0, total: 1, icon: "book-edit-outline", reward: "📝 Reflective Mind! +15 points" },
+    { id: 12, name: "Stretch your body for 5 minutes", completed: 0, total: 1, icon: "yoga", reward: "🤸 Flex Champ! +10 points" },
+    { id: 13, name: "Clean a small part of your room", completed: 0, total: 1, icon: "broom", reward: "🧼 Clean King/Queen! +15 points" },
+    { id: 14, name: "Make your bed", completed: 0, total: 1, icon: "bed", reward: "🛏️ Neat Freak! +10 points" },
+    { id: 15, name: "Drink a full glass of water", completed: 0, total: 1, icon: "cup-water", reward: "💧 Hydration Hero! +10 points" },
+    { id: 16, name: "Spend 5 minutes with nature (or look outside)", completed: 0, total: 1, icon: "leaf", reward: "🌿 Nature Buddy! +15 points" },
+    { id: 17, name: "Doodle or draw something — anything!", completed: 0, total: 1, icon: "palette", reward: "🎨 Creative Soul! +15 points" },
+    { id: 18, name: "Learn one new fact today", completed: 0, total: 1, icon: "lightbulb-on-outline", reward: "💡 Brain Booster! +10 points" },
+    { id: 19, name: "Organize your desktop or phone apps", completed: 0, total: 1, icon: "folder-move-outline", reward: "📂 Organized Mind! +10 points" },
+    { id: 20, name: "Watch a motivational video", completed: 0, total: 1, icon: "youtube", reward: "🎬 Inspired! +15 points" },
+    { id: 21, name: "Do 10 jumping jacks", completed: 0, total: 1, icon: "run-fast", reward: "🏃 Energy Burst! +10 points" },
+    { id: 22, name: "Take 5 deep breaths slowly", completed: 0, total: 1, icon: "weather-windy", reward: "🌬️ Breathe Boss! +10 points" },
+    { id: 23, name: "Compliment yourself out loud", completed: 0, total: 1, icon: "account-heart", reward: "💖 Self-Love Pro! +10 points" },
+    { id: 24, name: "Write a short note to your future self", completed: 0, total: 1, icon: "note-edit-outline", reward: "📩 Time Traveler! +15 points" },
+    { id: 25, name: "Declutter one drawer or shelf", completed: 0, total: 1, icon: "archive-outline", reward: "🗂️ Declutter King/Queen! +10 points" },
+    { id: 26, name: "Go screen-free for 15 minutes", completed: 0, total: 1, icon: "monitor-off", reward: "📵 Digital Detoxer! +15 points" },
+    { id: 27, name: "Sit in silence for 2 minutes", completed: 0, total: 1, icon: "volume-off", reward: "🤫 Peace Keeper! +10 points" },
+    { id: 28, name: "Do a random act of kindness", completed: 0, total: 1, icon: "hand-heart", reward: "💝 Kindness Hero! +20 points" },
+    { id: 29, name: "Light a candle or smell something nice", completed: 0, total: 1, icon: "candle", reward: "🕯️ Aroma Alchemist! +10 points" },
+    { id: 30, name: "Visualize a goal for 2 minutes", completed: 0, total: 1, icon: "eye", reward: "🎯 Visionary! +15 points" },
+  ];
+
+  const [tasks, setTasks] = useState([]);
+  const [streakDays, setStreakDays] = useState(0);
   const [totalPoints, setTotalPoints] = useState(100);
   const [showReward, setShowReward] = useState(false);
   const [currentReward, setCurrentReward] = useState('');
@@ -20,6 +52,72 @@ const DailyTasks = () => {
   const rewardScale = useState(new Animated.Value(0))[0];
   const rewardOpacity = useState(new Animated.Value(0))[0];
   const confettiOpacity = useState(new Animated.Value(0))[0];
+
+  const updateTaskCompletions = (tasksArray, completedArray) => {
+    const updated = tasksArray.map((task, index) => ({
+      ...task,
+      completed: completedArray[index] || 0
+    }));
+    setTasks(updated);
+  };
+  
+
+  useEffect(() => {
+    const initializeTasks = async () => {
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const storedDate = await AsyncStorage.getItem('date');
+        const storedTasks = await AsyncStorage.getItem('tasks');
+        const storedCompleted = await AsyncStorage.getItem('completed');
+  
+        if (!storedDate || !storedTasks || !storedCompleted) {
+
+          // First time user or data missing
+          const response = await axios.get('http://192.168.198.209:3000/api/tasks/getTasks');
+          const newTasks = await response.data;
+          console.log("1 ke andar aaya");
+  
+          await AsyncStorage.setItem('date', today);
+          await AsyncStorage.setItem('tasks', JSON.stringify(newTasks));
+          await AsyncStorage.setItem('completed', JSON.stringify([0, 0, 0]));
+  
+          setTasks(newTasks);
+          updateTaskCompletions(newTasks, [0, 0, 0]);
+
+          return;
+        }
+  
+        if (storedDate === today) {
+          console.log("2 ke andar aaya");
+          // Same day, load from storage
+          const parsedTasks = JSON.parse(storedTasks);
+          const parsedCompleted = JSON.parse(storedCompleted);
+          console.log("Tasks: " + parsedTasks);
+          console.log("Completed: " + parsedCompleted);
+          setTasks(parsedTasks);
+          updateTaskCompletions(parsedTasks, parsedCompleted);
+        } else {
+          console.log("3 ke andar aaya");
+          // New day
+          const response = await axios.get('http://192.168.198.209:3000/api/tasks/getTasks');
+          const newTasks = await response.data;
+          console.log(newTasks);
+  
+          await AsyncStorage.setItem('date', today);
+          await AsyncStorage.setItem('tasks', JSON.stringify(newTasks));
+          await AsyncStorage.setItem('completed', JSON.stringify([0, 0, 0]));
+  
+          setTasks(newTasks);
+          updateTaskCompletions(newTasks, [0, 0, 0]);
+        }
+      } catch (error) {
+        console.error('Error initializing tasks:', error);
+      }
+    };
+  
+    initializeTasks();
+  }, []);
+  
 
   // Calculate time left until next day
   useEffect(() => {
@@ -44,6 +142,7 @@ const DailyTasks = () => {
 
   // Check if all tasks are completed
   useEffect(() => {
+    if(tasks.length === 0) return;
     const allCompleted = tasks.every(task => task.completed >= task.total);
     if (allCompleted && !allCompletedReward) {
       setAllCompletedReward(true);
@@ -122,28 +221,29 @@ const DailyTasks = () => {
   const progress = calculateProgress();
 
   // Handle task completion
-  const handleTaskProgress = (taskId) => {
-    let pointsToAdd = 0;
-    let rewardText = '';
-
-    setTasks(prev => prev.map(task => {
-      if (task.id === taskId && task.completed < task.total) {
-        const newCompleted = task.completed + 1;
-        if (newCompleted >= task.total) {
-          // Task just completed
-          pointsToAdd = task.id === 2 ? 15 : 10; // 15 points for walking, 10 for others
-          rewardText = task.reward;
-          setTimeout(() => showRewardAnimation(rewardText), 100);
-        }
-        return { ...task, completed: newCompleted };
+  const handleTaskProgress = async (taskId) => {
+    setTasks(prevTasks => {
+      const updatedTasks = [...prevTasks];
+      const taskIndex = updatedTasks.findIndex(task => task.id === taskId);
+  
+      if (taskIndex !== -1 && updatedTasks[taskIndex].completed < updatedTasks[taskIndex].total) {
+        updatedTasks[taskIndex].completed += 1;
+  
+        // Save updated completions
+        const completedArray = updatedTasks.map(t => t.completed);
+        AsyncStorage.setItem('completed', JSON.stringify(completedArray));
+  
+        // Reward logic
+        const rewardPoints = taskId === 2 ? 15 : 10;
+        setTotalPoints(prev => prev + rewardPoints);
+        showRewardAnimation(updatedTasks[taskIndex].reward);
+  
+        // Streak and all task complete check will be triggered by useEffect on tasks
       }
-      return task;
-    }));
-
-    if (pointsToAdd > 0) {
-      setTotalPoints(prev => prev + pointsToAdd);
-    }
-  };
+  
+      return updatedTasks;
+    });
+  };  
 
   // Render confetti
   const renderConfetti = () => {
@@ -175,8 +275,14 @@ const DailyTasks = () => {
     return confetti;
   };
 
+  const handleClearData = async () => {
+    await AsyncStorage.removeItem("tasks");
+    await AsyncStorage.removeItem("date");
+    await AsyncStorage.removeItem("completed");
+  }
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {/* Animated Reward */}
       {showReward && (
         <Animated.View 
@@ -203,33 +309,6 @@ const DailyTasks = () => {
         <Text style={styles.refreshText}>Refresh in: {timeLeft}</Text>
       </View>
 
-      {/* Progress Bar */}
-      <View style={styles.progressContainer}>
-        <LinearGradient
-          colors={['#4a90e2', '#63d9ff']}
-          style={styles.progressBar}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        >
-          <View style={styles.milestones}>
-            <View style={[styles.milestone, progress >= 33 ? styles.milestoneActive : {}]}>
-              <Text style={styles.milestoneText}>33%</Text>
-              {progress >= 33 && <Text style={styles.milestoneEmoji}>🎯</Text>}
-            </View>
-            <View style={[styles.milestone, progress >= 66 ? styles.milestoneActive : {}]}>
-              <Text style={styles.milestoneText}>66%</Text>
-              {progress >= 66 && <Text style={styles.milestoneEmoji}>🚀</Text>}
-            </View>
-            <View style={[styles.milestone, progress >= 100 ? styles.milestoneActive : {}]}>
-              <Text style={styles.milestoneText}>100%</Text>
-              {progress >= 100 && (
-                <MaterialCommunityIcons name="trophy" size={24} color="#FFD700" style={styles.trophyIcon} />
-              )}
-            </View>
-          </View>
-        </LinearGradient>
-      </View>
-
       {/* Tasks */}
       {tasks.map((task) => (
         <View key={task.id} style={styles.taskContainer}>
@@ -238,17 +317,6 @@ const DailyTasks = () => {
           </View>
           <View style={styles.taskDetails}>
             <Text style={styles.taskName}>{task.name}</Text>
-            <View style={styles.progressBar}>
-              <View 
-                style={[
-                  styles.progressFill, 
-                  { width: `${(task.completed / task.total) * 100}% `}
-                ]}
-              />
-            </View>
-            <Text style={styles.taskProgress}>
-              {task.completed}/{task.total}
-            </Text>
           </View>
           <TouchableOpacity 
             style={[
@@ -279,19 +347,9 @@ const DailyTasks = () => {
         </Text>
       </View>
 
-      {/* Navigation */}
-      {/* <View style={styles.navigation}>
-        <TouchableOpacity style={styles.navButton}>
-          <Text style={styles.navButtonText}>Daily</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <Text style={styles.navButtonText}>Weekly</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton}>
-          <Text style={styles.navButtonText}>Monthly</Text>
-        </TouchableOpacity>
-      </View> */}
-    </View>
+      <Button onPress={handleClearData} title='Clear'>
+      </Button>
+    </ScrollView>
   );
 };
 

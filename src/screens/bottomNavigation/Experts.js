@@ -191,14 +191,14 @@ const Experts = ({ navigation }) => {
 
         </View>
 
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Upcoming Appointments</Text>
-            {/* <TouchableOpacity 
+            <TouchableOpacity 
               onPress={() => navigation.navigate('Appointments')}
             >
               <Text style={styles.seeAllText}>See All</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
 
           <View style={styles.appointmentCard}>
@@ -216,7 +216,7 @@ const Experts = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
