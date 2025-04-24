@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Constants from "expo-constants"
 
 const DailyTasks = () => {
   const [timeLeft, setTimeLeft] = useState('');
@@ -53,6 +54,8 @@ const DailyTasks = () => {
   const rewardOpacity = useState(new Animated.Value(0))[0];
   const confettiOpacity = useState(new Animated.Value(0))[0];
 
+  const nodeBackend = Constants.expoConfig?.extra?.nodeBackend;
+
   const updateTaskCompletions = (tasksArray, completedArray) => {
     const updated = tasksArray.map((task, index) => ({
       ...task,
@@ -73,7 +76,7 @@ const DailyTasks = () => {
         if (!storedDate || !storedTasks || !storedCompleted) {
 
           // First time user or data missing
-          const response = await axios.get('http://192.168.198.209:3000/api/tasks/getTasks');
+          const response = await axios.get(`${nodeBackend}/api/tasks/getTasks`);
           const newTasks = await response.data;
           console.log("1 ke andar aaya");
   
@@ -99,7 +102,7 @@ const DailyTasks = () => {
         } else {
           console.log("3 ke andar aaya");
           // New day
-          const response = await axios.get('http://192.168.198.209:3000/api/tasks/getTasks');
+          const response = await axios.get(`${nodeBackend}/api/tasks/getTasks`);
           const newTasks = await response.data;
           console.log(newTasks);
   

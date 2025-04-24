@@ -24,6 +24,7 @@ import {
   toDate
 } from "firebase/firestore";
 import { Alert } from "react-native";
+import Constants from "expo-constants"
 
 const CommunityChat = ({ route, navigation }) => {
   const { communityId } = route.params;
@@ -35,13 +36,15 @@ const CommunityChat = ({ route, navigation }) => {
   const flatListRef = useRef(null);
   const chatRef = collection(db, "messages");
 
+  const pythonBackend = Constants.expoConfig.extra.pythonBackend
+
   const validateMessage = async () => {
     try {
       const text = message.trim();
       console.log(text);
 
       const response = await axios.post(
-        "http://192.168.198.209:8000/send_message",
+        `${pythonBackend}/send_message`,
         { message: text },
         { headers: { "Content-Type": "application/json" } }
       );

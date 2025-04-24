@@ -41,7 +41,7 @@ const ExpertsChat = ({ route, navigation }) => {
       console.log(text);
 
       const response = await axios.post(
-        "http://192.168.198.209:5001/send_message",
+        "http://192.168.236.209:5001/send_message",
         { message: text },
         { headers: { "Content-Type": "application/json" } }
       );

@@ -15,6 +15,8 @@ import 'firebase/auth';
 
 import * as WebBrowser from 'expo-web-browser';
 WebBrowser.maybeCompleteAuthSession();
+import Constants from "expo-constants"
+
 
 const LoginScreen = ({ navigation }) => {
   const [isSignup, setIsSignup] = useState(false);
@@ -39,6 +41,8 @@ const LoginScreen = ({ navigation }) => {
       visibilityTime: 3000, // 3 seconds
     });
   };
+
+  const nodeBackend = Constants.expoConfig?.extra?.nodeBackend;
 
   useEffect(() => {
 
@@ -79,8 +83,8 @@ const LoginScreen = ({ navigation }) => {
 
   const handleAuth = async () => {
     const url = isSignup
-      ? "http://192.168.198.209:3000/api/auth/signup"
-      : "http://192.168.198.209:3000/api/auth/login";
+      ? `${nodeBackend}/api/auth/signup`
+      : `${nodeBackend}/api/auth/login`;
     const body = isSignup ? { name, email, password } : { email, password };
 
     try {
@@ -100,7 +104,7 @@ const LoginScreen = ({ navigation }) => {
         }
 
         if (data.user) {
-          if (data.user.name) await AsyncStorage.setItem("name", data.user.name);
+          if (data.user.name) await AsyncStorage.setItem("name", data.user.name.split(" ")[0]);
           if (data.user.email) await AsyncStorage.setItem("email", data.user.email);
           if (data.user.password) await AsyncStorage.setItem("password", data.user.password);
         }

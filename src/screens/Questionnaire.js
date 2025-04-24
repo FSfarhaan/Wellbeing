@@ -4,11 +4,14 @@ import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
+import Constants from "expo-constants"
 
 const Questionnaire = ({ navigation }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState([]); // Use an array instead of an object
   const [completed, setCompleted] = useState(false);
+
+  const pythonBackend = Constants.expoConfig.extra.pythonBackend
   
   // Your questions and options from the provided data
   const questionsData = [
@@ -153,7 +156,7 @@ const Questionnaire = ({ navigation }) => {
   const handleSubmit = async () => {
     console.log('Submitted answers:', answers);
     try {
-      const response = await axios.post("http://192.168.198.209:5000/predict", { responses: answers });
+      const response = await axios.post(`${pythonBackend}/predict`, { responses: answers });
       const data = await response.data;
   
       console.log(response.data);

@@ -32,6 +32,8 @@ import ProgressScreen from './src/screens/ExpertPortal/ProgressScreen';
 import { setupNotificationHandlers } from './src/utils/Notifications';
 import JournalList from './src/screens/bottomNavigation/journal/JournalList';
 import NoteScreen from './src/screens/bottomNavigation/journal/NoteScreen';
+import BackgroundTask from './src/utils/BackgroundTasks';
+import Constants from "expo-constants";
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -72,9 +74,12 @@ function BottomTabs({ navigation }) {
   useEffect(()=> {
     async function setup() {
       setupNotificationHandlers();
+      const nodeBackend = Constants.expoConfig?.extra?.nodeBackend;
       const token = await getPushToken();
       if (token) {
-        Alert.alert('Push Token', token); // Save this in your backend
+        const response = await axios.post(`${nodeBackend}/api/token/register`, { token });
+        const data = response.data;
+        console.log(data);
       }
     }
     setup();
@@ -186,6 +191,7 @@ export default function App() {
       <NavigationContainer>
         <StackNavigator />
         <Toast config={toastConfig} />
+        {/* <BackgroundTask /> */}
       </NavigationContainer>
       // <ChatScreen />
       // <Questionnaire />

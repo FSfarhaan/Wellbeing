@@ -15,12 +15,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import Toast from "react-native-toast-message";
 import { CommonActions } from "@react-navigation/native";
+import Constants from "expo-constants";
 
 const JournalList = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState("This week");
 
   const [notes, setNotes] = useState([]);
   const [token, setToken] = useState("");
+
+  const nodeBackend = Constants.expoConfig?.extra?.nodeBackend;
 
   const handlelogout = async () => {
     try {
@@ -56,7 +59,7 @@ const JournalList = ({ navigation }) => {
     // console.log(token);
     try {
       const response = await axios.get(
-        "http://192.168.198.209:3000/api/journal",
+        `${nodeBackend}/api/journal`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -164,7 +167,7 @@ const JournalList = ({ navigation }) => {
   const handleDelete = async (noteId) => {
     try {
       // Call your delete API here
-      await axios.delete(`http://192.168.198.209:3000/api/journal/${noteId}`, {
+      await axios.delete(`${nodeBackend}/api/journal/${noteId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -16,12 +16,14 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
+import Constants from "expo-constants";
 
 const NoteScreen = ({ route, navigation }) => {
   const { isNewNote, noteId, title, content, date } = route.params || {};
   const [noteTitle, setNoteTitle] = useState('');
   const [noteContent, setNoteContent] = useState('');
   const [token, setToken] = useState('');  
+  const nodeBackend = Constants.expoConfig?.extra?.nodeBackend;
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -54,8 +56,8 @@ const NoteScreen = ({ route, navigation }) => {
     console.log(noteId);
   
     const url = isNewNote 
-      ? "http://192.168.198.209:3000/api/journal"  // Replace with your local IP
-      : `http://192.168.198.209:3000/api/journal/${noteId}`;
+      ? `${nodeBackend}/api/journal`  // Replace with your local IP
+      : `${nodeBackend}/api/journal/${noteId}`;
   
     const method = isNewNote ? "post" : "put";
   

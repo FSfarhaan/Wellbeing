@@ -7,7 +7,9 @@
     "extra": {
       "eas": {
         "projectId": "0acbb5dd-af61-418d-8c1b-99b9ed8d024e"
-      }
+      },
+      "nodeBackend": "https://wellbeing-node-backend.onrender.com",
+      "pythonBackend": "https://wellbeing-python-backend.onrender.com"
     },
     "plugins": [
       [

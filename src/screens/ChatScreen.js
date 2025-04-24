@@ -13,19 +13,19 @@ import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from "expo-constants";
 
 const ChatScreen = () => {
   const [message, setMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState([
-    { _id: Date.now().toString(), text: "Hello Farhaan 👋 I'm your friend chatbot. How may I help you?", sender: "bot" },
-    { _id: (Date.now() + 1).toString(), text: "What can I do for you today?", sender: "bot" }
-  ]);
+  const [chatHistory, setChatHistory] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [visibleWords, setVisibleWords] = useState([]);
   const [responseText, setResponseText] = useState([]);
   const [token, setToken] = useState("");
+  const [sessionId, setSessionId] = useState("");
+  const [username, setUsername] = useState("");
 
   const fadeAnimations = useRef([]);
   const flatListRef = useRef(null);
@@ -72,6 +72,9 @@ const ChatScreen = () => {
     },
   ];
 
+  const nodeBackend = Constants.expoConfig.extra.nodeBackend;
+  const pythonBackend = Constants.expoConfig.extra.pythonBackend;
+
   const cleanText = (text) => {
     console.log("Clean text: " + text);
     return text
@@ -83,15 +86,15 @@ const ChatScreen = () => {
   const sendMessageToBackend = async (userMessage) => {
     console.log("Function ke andar: " + userMessage);
     try {
-      const response = await axios.post("http://192.168.198.209:8000/chat/",
+      const response = await axios.post(`${pythonBackend}/chat`,
         {
-          session_id: "123",
+          session_id: "1234567",
           user_input: userMessage
         }
       );
 
       console.log(userMessage);
-  
+
       console.log(response.data.response);
       return cleanText(response.data.response);
     } catch (error) {
@@ -99,9 +102,9 @@ const ChatScreen = () => {
       return "Sorry, I couldn't process your request right now.";
     }
   };
-  
+
   const saveMessages = async (text, sender) => {
-    const response = await axios.post("http://192.168.198.209:3000/api/bot/bot-chat", { text, sender }, {
+    const response = await axios.post(`${nodeBackend}/api/bot/bot-chat`, { text, sender }, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -111,7 +114,7 @@ const ChatScreen = () => {
   }
 
   const handleSend = async () => {
-    if (message.trim() === "") return;    
+    if (message.trim() === "") return;
 
     const userMessageText = message;
     saveMessages(userMessageText, "user");
@@ -119,14 +122,14 @@ const ChatScreen = () => {
       ...prevHistory,
       { _id: Date.now().toString(), text: userMessageText, sender: "user" },
     ]);
-    
+
     setMessage("");
     setIsLoading(true);
 
     console.log(userMessageText);
     const botResponse = await sendMessageToBackend(userMessageText);
     console.log("Message aaya");
-    
+    console.log(sessionId);
 
     setIsTyping(true);
     setResponseText(botResponse.trim().split(/\s+/).filter(word => word !== ''));
@@ -229,32 +232,51 @@ const ChatScreen = () => {
 
   useEffect(() => {
     const getMessages = async () => {
-      if(!token) return;
+      if (!token) return;
       try {
-          const response = await axios.get("http://192.168.198.209:3000/api/bot/bot-chat", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          const data = response.data;
-          console.log(data.messages);
+        const response = await axios.get(`${nodeBackend}/api/bot/bot-chat`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = response.data;
+        console.log(data.messages);
 
-          // Ensure `data.messages` is correctly added to chatHistory
-          setChatHistory((prev) => [...prev, ...data.messages]); 
+        // Ensure `data.messages` is correctly added to chatHistory
+        setChatHistory((prev) => [...prev, ...data.messages]);
       } catch (error) {
-          console.error("Error fetching messages:", error);
+        console.error("Error fetching messages:", error);
       }
-  };
+    };
     getMessages();
   }, [token])
 
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true });
-}, [chatHistory]);
+  }, [chatHistory]);
 
-useEffect(() => {
-  AsyncStorage.getItem("token").then(setToken);
-}, []);
+  useEffect(() => {
+    const initialize = async () => {
+      const token = await AsyncStorage.getItem("token");
+      const email = await AsyncStorage.getItem("email");
+      const name = await AsyncStorage.getItem("name");
+
+      setToken(token);
+      setSessionId(email);
+      setUsername(name);
+    };
+    initialize();
+  }, []);
+
+  useEffect(() => {
+    if (username) {
+      setChatHistory([
+        { _id: Date.now().toString(), text: `Hello ${username} 👋 I'm your friend chatbot.`, sender: "bot" },
+        { _id: (Date.now() + 1).toString(), text: "What can I do for you today?", sender: "bot" }
+      ]);
+    }
+  }, [username]);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -270,7 +292,7 @@ useEffect(() => {
         ]}
         renderItem={renderMessage}
         style={styles.chatContainer}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.chatContent}
         onLayout={() => flatListRef.current?.scrollToEnd({ animated: false })}
       />

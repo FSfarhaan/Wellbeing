@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { doctorsData } from '../../../data/doctorsData';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import Constants from "expo-constants"
 
 const DoctorProfileScreen = ({ route, navigation }) => {
   const { doctorId } = route.params;
@@ -12,6 +13,8 @@ const DoctorProfileScreen = ({ route, navigation }) => {
   const [selectedDay, setSelectedDay] = useState('Tue');
   const [selectedDate, setSelectedDate] = useState('12');
   const [selectedAppointmentType, setSelectedAppointmentType] = useState('Male');
+  const pythonBackend = Constants.expoConfig.extra.pythonBackend
+  
 
   useEffect(() => {
     const foundDoctor = doctorsData.find(doc => doc.id === doctorId);
@@ -30,7 +33,7 @@ const DoctorProfileScreen = ({ route, navigation }) => {
       const psychologist_email = "fsfarhaanshaikh7@gmail.com";
       const session_details = payload;
 
-      const response = await axios.post("http://192.168.198.209:5005/request-session", {
+      const response = await axios.post(`${pythonBackend}/request-session`, {
         user_email, psychologist_email, session_details
       });
 
