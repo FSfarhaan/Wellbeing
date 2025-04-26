@@ -29,10 +29,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import DailyTasks from './src/screens/DailyTasks';
 import PatientListScreen from './src/screens/ExpertPortal/PatientsList'
 import ProgressScreen from './src/screens/ExpertPortal/ProgressScreen';
-import { setupNotificationHandlers } from './src/utils/Notifications';
+import { getPushToken, setupNotificationHandlers } from './src/utils/Notifications';
 import JournalList from './src/screens/bottomNavigation/journal/JournalList';
 import NoteScreen from './src/screens/bottomNavigation/journal/NoteScreen';
-import BackgroundTask from './src/utils/BackgroundTasks';
 import Constants from "expo-constants";
 
 const Tab = createBottomTabNavigator();
@@ -191,7 +190,6 @@ export default function App() {
       <NavigationContainer>
         <StackNavigator />
         <Toast config={toastConfig} />
-        {/* <BackgroundTask /> */}
       </NavigationContainer>
       // <ChatScreen />
       // <Questionnaire />

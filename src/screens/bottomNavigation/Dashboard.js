@@ -39,6 +39,7 @@ const Dashboard = ({ navigation }) => {
   
           console.log("Token:", token);
           console.log("Name:", name);
+          setName(name);
           console.log("Email:", email);
           console.log("Password:", password);
         } catch (error) {

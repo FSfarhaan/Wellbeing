@@ -31,6 +31,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "jsEngine": "hermes",
+    "main": "App.js",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
