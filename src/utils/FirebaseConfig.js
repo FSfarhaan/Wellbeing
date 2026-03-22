@@ -10,7 +10,7 @@ const firebaseConfig = {
   projectId: "peacehub-a5219",
   storageBucket: "peacehub-a5219.firebasestorage.app",
   messagingSenderId: "749138955039",
-  appId: "1:749138955039:web:65df66b890654a53237e2a"
+  appId: "1:749138955039:web:65df6firebaseService.js6b890654a53237e2a"
 };
 
 // Initialize Firebase

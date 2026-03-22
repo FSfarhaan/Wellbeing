@@ -5,12 +5,8 @@ import {
   StyleSheet, 
   ScrollView, 
   TouchableOpacity, 
-  TextInput, 
   SafeAreaView,
-  KeyboardAvoidingView,
-  Platform
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const Mindful = () => {

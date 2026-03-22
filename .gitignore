@@ -40,3 +40,5 @@ yarn-error.*
 *__pycache__
 
 android
+
+build/

@@ -4,34 +4,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import { CommonActions } from '@react-navigation/native';
-import * as Google from 'expo-auth-session/providers/google';
-import * as AuthSession from 'expo-auth-session';
-import { onAuthStateChanged, signInWithCredential, GoogleAuthProvider } from "firebase/auth";
-import { auth } from '../utils/FirebaseConfig';
 
-// import * as Facebook from 'expo-facebook';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-
-import * as WebBrowser from 'expo-web-browser';
-WebBrowser.maybeCompleteAuthSession();
 import Constants from "expo-constants"
-
 
 const LoginScreen = ({ navigation }) => {
   const [isSignup, setIsSignup] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: "749138955039-ji4r4lfdk20kbglabu7ci1j95h8unoi2.apps.googleusercontent.com",
-    androidClientId: "749138955039-ji4r4lfdk20kbglabu7ci1j95h8unoi2.apps.googleusercontent.com",
-    webClientId: "749138955039-ji4r4lfdk20kbglabu7ci1j95h8unoi2.apps.googleusercontent.com",
-    redirectUri: AuthSession.makeRedirectUri({ useProxy: true })
-  });
-
-  const [user, setUser] = useState(null);
 
   const showToast = (type, message) => {
     Toast.show({
@@ -60,26 +40,6 @@ const LoginScreen = ({ navigation }) => {
 
     checkLogin();
   }, []);
-
-  useEffect(() => {
-    if (response?.type === "success") {
-      const { id_token } = response.authentication;
-
-      const credential = GoogleAuthProvider.credential(id_token);
-
-      signInWithCredential(auth, credential)
-        .then(userCredential => {
-          const user = userCredential.user;
-          console.log("User signed in with Google:", user.displayName, user.email);
-          setUser({
-            name: user.displayName,
-            email: user.email,
-            photo: user.photoURL,
-          });
-        })
-        .catch(err => console.log("Firebase SignIn Error:", err));
-    }
-  }, [response]);
 
   const handleAuth = async () => {
     const url = isSignup

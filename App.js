@@ -3,7 +3,6 @@ import 'react-native-gesture-handler';
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import ChatScreen from './src/screens/ChatScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack"
 import { Ionicons } from '@expo/vector-icons';
 import Dashboard from './src/screens/bottomNavigation/Dashboard';
@@ -13,8 +12,6 @@ import DoctorListScreen from './src/screens/bottomNavigation/experts/DoctorListS
 import DoctorProfileScreen from './src/screens/bottomNavigation/experts/DoctorProfileScreen';
 import Mindful from './src/screens/bottomNavigation/Mindful';
 import Reports from './src/screens/bottomNavigation/Reports';
-import Profile from './src/screens/sideDrawer/Profile';
-import Settings from './src/screens/sideDrawer/Settings';
 import { NavigationContainer } from '@react-navigation/native';
 import MusicPlayerScreen from './src/screens/bottomNavigation/sounds/MusicPlayer';
 import MusicListScreen from './src/screens/bottomNavigation/sounds/MusicListScreen';
@@ -25,17 +22,14 @@ import LoginScreen from './src/screens/Login';
 import Questionnaire from './src/screens/Questionnaire';
 import CommunityChat from './src/screens/CommunityChat';
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import DailyTasks from './src/screens/DailyTasks';
 import PatientListScreen from './src/screens/ExpertPortal/PatientsList'
 import ProgressScreen from './src/screens/ExpertPortal/ProgressScreen';
 import { getPushToken, setupNotificationHandlers } from './src/utils/Notifications';
 import JournalList from './src/screens/bottomNavigation/journal/JournalList';
 import NoteScreen from './src/screens/bottomNavigation/journal/NoteScreen';
-import Constants from "expo-constants";
 
 const Tab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 
@@ -76,12 +70,19 @@ function BottomTabs({ navigation }) {
       const nodeBackend = Constants.expoConfig?.extra?.nodeBackend;
       const token = await getPushToken();
       if (token) {
-        const response = await axios.post(`${nodeBackend}/api/token/register`, { token });
-        const data = response.data;
-        console.log(data);
+        try {
+          const response = await axios.post(`${nodeBackend}/api/token/register`, { token: token });
+          const data = response.data;
+          console.log(data);
+        } catch (err) {
+          console.log(err)
+        }
+      } else {
+        console.log("Gadbad hai");
       }
     }
-    setup();
+    // setup();
+  
   }, [])
 
   return (
